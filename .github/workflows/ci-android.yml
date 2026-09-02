@@ -46,13 +46,11 @@ jobs:
       - name: Create local.properties
         if: github.event_name != 'pull_request'
         run: |
-          cat > android/local.properties << 'EOF'
-          sdk.dir=/usr/local/lib/android/sdk
-          RELEASE_STORE_FILE=../release.keystore
-          RELEASE_STORE_PASSWORD=${{ secrets.RELEASE_STORE_PASSWORD }}
-          RELEASE_KEY_ALIAS=${{ secrets.RELEASE_KEY_ALIAS }}
-          RELEASE_KEY_PASSWORD=${{ secrets.RELEASE_KEY_PASSWORD }}
-          EOF
+          echo "sdk.dir=/usr/local/lib/android/sdk" > android/local.properties
+          echo "RELEASE_STORE_FILE=../release.keystore" >> android/local.properties
+          echo "RELEASE_STORE_PASSWORD=${{ secrets.RELEASE_STORE_PASSWORD }}" >> android/local.properties
+          echo "RELEASE_KEY_ALIAS=${{ secrets.RELEASE_KEY_ALIAS }}" >> android/local.properties
+          echo "RELEASE_KEY_PASSWORD=${{ secrets.RELEASE_KEY_PASSWORD }}" >> android/local.properties
       - name: Build debug APK for PRs
         if: github.event_name == 'pull_request'
         run: ./gradlew assembleFossDebug
