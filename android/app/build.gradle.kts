@@ -72,9 +72,6 @@ android {
             }
         }
         debug {
-            if (releaseSigningAvailable) {
-                signingConfig = signingConfigs.getByName("release")
-            }
             versionNameSuffix = "-debug"
             defaultConfig {
                 minSdk = 33
