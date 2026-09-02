@@ -14,28 +14,38 @@ import me.kavishdevar.aurix.utils.XposedState
 class AurisApplication: Application(), XposedServiceHelper.OnServiceListener, DefaultLifecycleObserver {
 
     override fun onCreate() {
-        XposedServiceHelper.registerListener(this)
+        try {
+            XposedServiceHelper.registerListener(this)
+        } catch (_: Exception) { }
         BillingManager.provider = BillingProviderFactory.create(this)
-        ProcessLifecycleOwner.get().lifecycle.addObserver(this)
+        try {
+            ProcessLifecycleOwner.get().lifecycle.addObserver(this)
+        } catch (_: Exception) { }
 
         super<Application>.onCreate()
 
     }
 
     override fun onResume(owner: LifecycleOwner) {
-        BillingManager.provider.queryPurchases()
-        XposedState.isAvailable = XposedServiceHolder.service != null
-        XposedState.bluetoothScopeEnabled = XposedServiceHolder.service?.scope?.contains("com.google.android.bluetooth") == true || XposedServiceHolder.service?.scope?.contains("com.android.bluetooth") == true
+        try {
+            BillingManager.provider.queryPurchases()
+            XposedState.isAvailable = XposedServiceHolder.service != null
+            XposedState.bluetoothScopeEnabled = XposedServiceHolder.service?.scope?.contains("com.google.android.bluetooth") == true || XposedServiceHolder.service?.scope?.contains("com.android.bluetooth") == true
+        } catch (_: Exception) { }
     }
 
     override fun onServiceBind(service: XposedService) {
-        XposedServiceHolder.service = service
-        XposedState.isAvailable = true
-        XposedState.bluetoothScopeEnabled = XposedServiceHolder.service?.scope?.contains("com.google.android.bluetooth") == true || XposedServiceHolder.service?.scope?.contains("com.android.bluetooth") == true
+        try {
+            XposedServiceHolder.service = service
+            XposedState.isAvailable = true
+            XposedState.bluetoothScopeEnabled = XposedServiceHolder.service?.scope?.contains("com.google.android.bluetooth") == true || XposedServiceHolder.service?.scope?.contains("com.android.bluetooth") == true
+        } catch (_: Exception) { }
     }
 
     override fun onServiceDied(p0: XposedService) {
-        XposedServiceHolder.service = null
-        XposedState.isAvailable = false
+        try {
+            XposedServiceHolder.service = null
+            XposedState.isAvailable = false
+        } catch (_: Exception) { }
     }
 }
