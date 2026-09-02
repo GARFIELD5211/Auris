@@ -45,12 +45,16 @@ jobs:
         run: sdkmanager "ndk;30.0.14904198"
       - name: Create local.properties
         if: github.event_name != 'pull_request'
+        env:
+          RELEASE_STORE_PASSWORD: ${{ secrets.RELEASE_STORE_PASSWORD }}
+          RELEASE_KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
+          RELEASE_KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}
         run: |
-          echo "sdk.dir=/usr/local/lib/android/sdk" > android/local.properties
-          echo "RELEASE_STORE_FILE=../release.keystore" >> android/local.properties
-          echo "RELEASE_STORE_PASSWORD=${{ secrets.RELEASE_STORE_PASSWORD }}" >> android/local.properties
-          echo "RELEASE_KEY_ALIAS=${{ secrets.RELEASE_KEY_ALIAS }}" >> android/local.properties
-          echo "RELEASE_KEY_PASSWORD=${{ secrets.RELEASE_KEY_PASSWORD }}" >> android/local.properties
+          printf 'sdk.dir=/usr/local/lib/android/sdk\n' > android/local.properties
+          printf 'RELEASE_STORE_FILE=../release.keystore\n' >> android/local.properties
+          printf 'RELEASE_STORE_PASSWORD=%s\n' "$RELEASE_STORE_PASSWORD" >> android/local.properties
+          printf 'RELEASE_KEY_ALIAS=%s\n' "$RELEASE_KEY_ALIAS" >> android/local.properties
+          printf 'RELEASE_KEY_PASSWORD=%s\n' "$RELEASE_KEY_PASSWORD" >> android/local.properties
       - name: Build debug APK for PRs
         if: github.event_name == 'pull_request'
         run: ./gradlew assembleFossDebug
