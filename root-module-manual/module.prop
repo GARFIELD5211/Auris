@@ -1,0 +1,6 @@
+id=aurix
+name=Auris
+version=v1.0.0
+versionCode=1
+author=@kavishdevar
+description=Installs Auris as a system app for granting BLUETOOTH_PRIVILEGED and MODIFY_PHONE_STATE permission for better integration with Android.
