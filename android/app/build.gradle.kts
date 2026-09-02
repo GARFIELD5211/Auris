@@ -1,4 +1,5 @@
 import java.util.Properties
+import java.security.KeyStore
 
 val appVersionName = "1.0.0"
 
@@ -17,12 +18,31 @@ val props = Properties().apply {
     }
 }
 
-val releaseSigningAvailable = listOf(
-    "RELEASE_STORE_FILE",
-    "RELEASE_STORE_PASSWORD",
-    "RELEASE_KEY_ALIAS",
-    "RELEASE_KEY_PASSWORD"
-).all { props[it]?.toString()?.isNotBlank() == true }
+val releaseStoreFile = props["RELEASE_STORE_FILE"]?.toString()?.takeIf { it.isNotBlank() }
+val releaseStorePassword = props["RELEASE_STORE_PASSWORD"]?.toString()?.takeIf { it.isNotBlank() }
+val releaseKeyAlias = props["RELEASE_KEY_ALIAS"]?.toString()?.takeIf { it.isNotBlank() }
+val releaseKeyPassword = props["RELEASE_KEY_PASSWORD"]?.toString()?.takeIf { it.isNotBlank() }
+
+val releaseSigningConfigured = listOf(
+    releaseStoreFile,
+    releaseStorePassword,
+    releaseKeyAlias,
+    releaseKeyPassword
+).all { it != null }
+
+val releaseSigningAvailable = if (releaseSigningConfigured) {
+    try {
+        val keystore = KeyStore.getInstance(KeyStore.getDefaultType())
+        file(releaseStoreFile!!).inputStream().use { stream ->
+            keystore.load(stream, releaseStorePassword!!.toCharArray())
+        }
+        keystore.isKeyEntry(releaseKeyAlias)
+    } catch (_: Exception) {
+        false
+    }
+} else {
+    false
+}
 
 kotlin {
     compilerOptions {
@@ -36,10 +56,10 @@ android {
     signingConfigs {
         if (releaseSigningAvailable) {
             create("release") {
-                storeFile = file(props["RELEASE_STORE_FILE"] as String)
-                storePassword = props["RELEASE_STORE_PASSWORD"] as String
-                keyAlias = props["RELEASE_KEY_ALIAS"] as String
-                keyPassword = props["RELEASE_KEY_PASSWORD"] as String
+                storeFile = file(releaseStoreFile!!)
+                storePassword = releaseStorePassword
+                keyAlias = releaseKeyAlias
+                keyPassword = releaseKeyPassword
             }
         }
     }
