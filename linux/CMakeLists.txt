@@ -13,10 +13,10 @@ qt_standard_project_setup()
 
 # Translation files
 set(TS_FILES
-    translations/auris_tr.ts
+    translations/librepods_tr.ts
 )
 
-qt_add_executable(auris
+qt_add_executable(librepods
     main.cpp
     logger.h
     media/mediacontroller.cpp
@@ -46,7 +46,7 @@ qt_add_executable(auris
     systemsleepmonitor.hpp
 )
 
-qt_add_qml_module(auris
+qt_add_qml_module(librepods
     URI linux
     VERSION 1.0
     QML_FILES
@@ -59,7 +59,7 @@ qt_add_qml_module(auris
 )
 
 # Add the resource file
-qt_add_resources(auris "resources"
+qt_add_resources(librepods "resources"
     PREFIX "/icons"
     FILES
         assets/airpods.png
@@ -74,39 +74,39 @@ qt_add_resources(auris "resources"
         assets/fonts/SF-Symbols-6.ttf
 )
 
-target_link_libraries(auris
+target_link_libraries(librepods
     PRIVATE Qt6::Quick Qt6::Widgets Qt6::Bluetooth Qt6::DBus OpenSSL::SSL OpenSSL::Crypto ${PULSEAUDIO_LIBRARIES}
 )
 
-qt_add_executable(auris-ctl
-    auris-ctl.cpp
+qt_add_executable(librepods-ctl
+    librepods-ctl.cpp
 )
-target_link_libraries(auris-ctl
+target_link_libraries(librepods-ctl
     PRIVATE Qt6::Core Qt6::Network
 )
-install(TARGETS auris-ctl
+install(TARGETS librepods-ctl
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 
-target_include_directories(auris PRIVATE ${PULSEAUDIO_INCLUDE_DIRS})
+target_include_directories(librepods PRIVATE ${PULSEAUDIO_INCLUDE_DIRS})
 
 include(GNUInstallDirs)
-install(TARGETS auris
+install(TARGETS librepods
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
-install(FILES assets/me.auris.app.desktop
+install(FILES assets/me.kavishdevar.librepods.desktop
     DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/applications")
-install(FILES assets/auris.svg
+install(FILES assets/librepods.svg
     DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/scalable/apps")
 
 # Translation support
-qt_add_translations(auris
+qt_add_translations(librepods
     TS_FILES ${TS_FILES}
     QM_FILES_OUTPUT_VARIABLE QM_FILES
 )
 
 # Install translation files
 install(FILES ${QM_FILES}
-    DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/auris/translations"")
+    DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/librepods/translations")

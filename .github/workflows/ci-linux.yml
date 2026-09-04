@@ -1,4 +1,4 @@
-name: Build Auris Linux
+name: Build LibrePods Linux
 
 on:
   workflow_dispatch:
@@ -33,5 +33,5 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: auris-linux
-          path: linux/build/auris
+          name: librepods-linux
+          path: linux/build/librepods

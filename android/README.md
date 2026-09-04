@@ -1,10 +1,10 @@
 ## Root Requirement
 
-Auris *may* require root depending on your device/OS and what features you want access to:
+LibrePods *may* require root depending on your device/OS and what features you want access to:
 
-- Features requiring the VendorID hook ([the features marked with an asterisk here](https://github.com/kavishdevar/auris#key-features)) will always require root regardless of your device/OS.
-- On **ColorOS/OxygenOS 16 and realme UI 7.0** and **Pixel devices on Android 16 QPR3** (with the latest Google Play system update), Auris does not need root for most features.
-- On other devices, Auris needs root because of a bug in the Android Bluetooth stack Fluoride/non-compliance of Apple with Bluetooth standards. You must have Xposed installed for the app to workaround this bug and connect to AirPods. [This issue is being tracked here](https://issuetracker.google.com/issues/371713238). **Please do not comment on the issue thread.** The issue has already been resolved and should be available in **Android 17** for all devices.
+- Features requiring the VendorID hook ([the features marked with an asterisk here](https://github.com/kavishdevar/librepods#key-features)) will always require root regardless of your device/OS.
+- On **ColorOS/OxygenOS 16 and realme UI 7.0** and **Pixel devices on Android 16 QPR3** (with the latest Google Play system update), LibrePods does not need root for most features.
+- On other devices, LibrePods needs root because of a bug in the Android Bluetooth stack Fluoride/non-compliance of Apple with Bluetooth standards. You must have Xposed installed for the app to workaround this bug and connect to AirPods. [This issue is being tracked here](https://issuetracker.google.com/issues/371713238). **Please do not comment on the issue thread.** The issue has already been resolved and should be available in **Android 17** for all devices.
 
 > [!IMPORTANT]
 > This workaround with Xposed is not guaranteed to work on all devices.
@@ -14,9 +14,9 @@ Auris *may* require root depending on your device/OS and what features you want 
 
 ### Google Play Store
 
-If you are using a supported device/OS combination, you can install Auris from the Google Play Store. You can use the VendorID hook features with root even from the Play Store version.
+If you are using a supported device/OS combination, you can install LibrePods from the Google Play Store. You can use the VendorID hook features with root even from the Play Store version.
 
-<a href="https://play.google.com/store/apps/details?id=me.kavishdevar.aurix"><img width="170" alt="GetItOnGooglePlay_Badge_Web_color_English" src="https://github.com/user-attachments/assets/2948308f-af92-443f-94d9-ee381c3a6ccc"/></a>
+<a href="https://play.google.com/store/apps/details?id=me.kavishdevar.librepods"><img width="170" alt="GetItOnGooglePlay_Badge_Web_color_English" src="https://github.com/user-attachments/assets/2948308f-af92-443f-94d9-ee381c3a6ccc"/></a>
 
 ### GitHub Releases
 
@@ -24,7 +24,7 @@ If you need xposed because of the [root requirement](#root-requirement), you wil
 
 ### As a system app (root module)
 
-If you want Auris to have privileged Bluetooth permissions to 
+If you want LibrePods to have privileged Bluetooth permissions to 
 - show battery status in the system settings and widgets
 - show AirPods icon in the system settings (xposed is also currently required for this)
 - switch audio to phone speakers when you are not wearing your AirPods

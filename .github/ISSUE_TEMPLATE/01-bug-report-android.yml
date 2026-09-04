@@ -92,8 +92,8 @@ body:
         (Needs access to a computer, and USB/Wireless Debugging under developer options enabled)
 
         Commands:
-        - Get the uid: Linux/Mac: `adb shell dumpsys package me.kavishdevar.aurix | grep uid`
-        - Start logs: `adb logcat --uid=<uid>,1002 >> auris-logs.txt` (1002 is for bluetooth)
+        - Get the uid: Linux/Mac: `adb shell dumpsys package me.kavishdevar.librepods | grep uid`
+        - Start logs: `adb logcat --uid=<uid>,1002 >> librepods-logs.txt` (1002 is for bluetooth)
         
         Steps for proper logs
         - force close the app

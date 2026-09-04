@@ -20,4 +20,4 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
--keep class me.kavishdevar.aurix.utils.KotlinModule { *; }
+-keep class me.kavishdevar.librepods.utils.KotlinModule { *; }

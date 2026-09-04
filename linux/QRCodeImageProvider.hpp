@@ -14,8 +14,8 @@ public:
         if (keys.size() != 2)
             return QImage();
 
-        // Create URL format: auris://add-magic-keys?enc_key=...&irk=...
-        QString data = QString("auris://add-magic-keys?enc_key=%1&irk=%2").arg(keys[0], keys[1]);
+        // Create URL format: librepods://add-magic-keys?enc_key=...&irk=...
+        QString data = QString("librepods://add-magic-keys?enc_key=%1&irk=%2").arg(keys[0], keys[1]);
 
         // Generate QR code using the existing qrcodegen library
         qrcodegen::QrCode qr = qrcodegen::QrCode::encodeText(data.toUtf8().constData(), qrcodegen::QrCode::Ecc::MEDIUM);

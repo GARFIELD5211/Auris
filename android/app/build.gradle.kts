@@ -1,6 +1,6 @@
 import java.util.Properties
 
-val appVersionName = "1.0.0"
+val appVersionName = "1.0.0-rc2"
 
 plugins {
     alias(libs.plugins.android.application)
@@ -43,11 +43,11 @@ android {
             }
         }
     }
-    namespace = "me.auris.app"
+    namespace = "me.kavishdevar.librepods"
     compileSdk = 37
 
     defaultConfig {
-        applicationId = "me.auris.app"
+        applicationId = "me.kavishdevar.librepods"
         targetSdk = 37
         versionCode = 63
         versionName = appVersionName
@@ -72,6 +72,9 @@ android {
             }
         }
         debug {
+            if (releaseSigningAvailable) {
+                signingConfig = signingConfigs.getByName("release")
+            }
             versionNameSuffix = "-debug"
             defaultConfig {
                 minSdk = 33
@@ -186,13 +189,13 @@ fun registerRootModuleZipTask(
     duplicatesStrategy = DuplicatesStrategy.WARN
 
     from(layout.buildDirectory.file(apkPath)) {
-        into("system/priv-app/Auris")
-        rename { "Auris.apk" }
+        into("system/priv-app/LibrePods")
+        rename { "LibrePods.apk" }
     }
 
     delete(layout.buildDirectory.dir("outputs/rootModuleZips"))
 
-    archiveFileName.set("Auris-v$appVersionName-$buildType.zip")
+    archiveFileName.set("LibrePods-FOSS-v$appVersionName-$buildType.zip")
     destinationDirectory.set(layout.buildDirectory.dir("outputs/rootModuleZips"))
 }
 
@@ -220,12 +223,12 @@ val collect = tasks.register<Copy>("collectReleaseArtifacts") {
 
     from(layout.buildDirectory.dir("outputs/apk/foss/release")) {
         include("*.apk")
-        rename(".*", "Auris-v$appVersionName-release.apk")
+        rename(".*", "LibrePods-FOSS-v$appVersionName-release.apk")
     }
 
     from(layout.buildDirectory.dir("outputs/apk/foss/debug")) {
         include("*.apk")
-        rename(".*", "Auris-v$appVersionName-debug.apk")
+        rename(".*", "LibrePods-FOSS-v$appVersionName-debug.apk")
     }
 
     from(layout.buildDirectory.dir("outputs/bundle/playRelease")) {

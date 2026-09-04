@@ -1,92 +1,241 @@
-# Auris
+> [!WARNING]
+> librepods.org is not an official website of the LibrePods project. It inaccurately claims to be the official website of the project by claiming copyrights and using the LibrePods logo in the footer. And at the same time, they say that the project is not affiliated with the LibrePods project or its developers.
+> 
+> Please report any other such websites to [me@kavish.xyz](mailto:me@kavish.xyz)
+ 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="./imgs/banner-dark.png" />
+  <source media="(prefers-color-scheme: light)" srcset="./imgs/banner.png" />
+  <img alt="LibrePods" src="./imgs/banner.png" />
+</picture>
 
-> AirPods companion app for Android and Linux — unlocked features, no compromises.
+<div align="center" style="margin: 20px 0px;">
+<a href="https://github.com/kavishdevar/librepods/releases/latest">
+  <img src="https://img.shields.io/github/downloads/kavishdevar/librepods/total?label=GitHub%20Downloads" />
+</a>
+<a href="https://github.com/kavishdevar/librepods/actions/workflows/ci-android.yml">
+  <img src="https://github.com/kavishdevar/librepods/actions/workflows/ci-android.yml/badge.svg" />
+</a>
+<a href="https://github.com/kavishdevar/librepods/actions/workflows/ci-linux-rust.yml">
+  <img src="https://github.com/kavishdevar/librepods/actions/workflows/ci-linux-rust.yml/badge.svg" />
+</a>
+<a href="https://github.com/kavishdevar/librepods/issues">
+  <img src="https://img.shields.io/github/issues/kavishdevar/librepods" />  
+</a>
+<a href="https://discord.gg/HhG4ycVum4">
+  <img src="https://img.shields.io/discord/1441416992027574375?logoColor=white&color=5865F2&label=Discord" />
+</a>
+</div>
 
-Auris implements the proprietary protocol used to exchange data between AirPods and Apple devices, enabling features like changing noise control modes, fast ear detection, accurate battery status, head gestures, conversational awareness, and more on non-Apple platforms.
+# What is LibrePods?
 
-**All features are available for free — no premium restrictions.**
+LibrePods allows you to use AirPods features that are exclusive to Apple devices. It implements the proprietary protocol used to exchange data between AirPods and Apple devices, enabling features like changing noise control modes, fast ear detection, accurate battery status, head gestures, conversational awareness, and more on non-Apple platforms.
 
----
+# Feature availability
 
-## Features
+| Feature                                                     | Linux | Android |
+| ----------------------------------------------------------- | ----- | ------- |
+| Changing Listening Mode                                     | ✅     | ✅       |
+| Ear detection                                               | ✅     | ✅       |
+| Battery status                                              | ✅     | ✅       |
+| Renaming AirPods <details><summary>Note for Android</summary>On Android, you need to re-pair your AirPods after renaming them because Android might not use the latest name.</details>                                            | ✅     | ✅       |
+| Loud Sound Reduction                                        | 🔴     | ⚪       |
+| Head Gestures                                               | ⛔     | ✅       |
+| Conversational Awareness                                    | ✅     | ✅       |
+| Automatically connect to AirPods                            | ✅     | ✅       |
+| Hearing Aid                                                 | 🔴     | ⚪       |
+| Transparency Mode customization                             | 🔴     | ⚪       |
+| Multi-device connectivity (Bluetooth Multipoint; 2 devices only) | ⚪     | ⚪       |
+| <details><summary>Other accessibility configs (click to expand)</summary><ul><li>Press speed</li><li>Press and Hold duration</li><li>Noise Cancellation with single AirPod</li><li>Volume control on swipe</li><li>Volume swipe speed</li></ul></details>       | 🔴     | ✅       |
+| <details><summary>Other general configs</summary><ul><li>Press and Hold to cycle between listening modes/invoke digital assistant (invoking digital assistant needs a recent firmware)</li><li>Configure call controls</li><li>Personalized volume</li><li>Loud Sound Reduction (needs <a href="#vendorid-spoofing">VendorID spoofing</a>)</li><li>Microphone side</li><li>Pause media when falling asleep (needs a recent firmware)</li><li>Enable <code>Off listening mode</code> to switch to <code>Off</code></li></ul></details>                   | 🔴     | ✅       |
+| [Head-tracked Spatial Audio](#spatial-audio)                | ❓     | ❓       |
+| [Heart Rate Monitoring](#heart-rate-monitoring)             | ⛔     | 🔴       |
+| [Find My](#find-my)                                         | ❓     | ❓       |
+| [High quality two-way audio](#high-quality-two-way-audio)   | 🔴     | 🔴       |
 
-| Feature | Linux | Android |
-|---|---|---|
-| Changing Listening Mode | ✅ | ✅ |
-| Ear Detection | ✅ | ✅ |
-| Battery Status | ✅ | ✅ |
-| Renaming AirPods | ✅ | ✅ |
-| Head Gestures | ⛔ | ✅ |
-| Conversational Awareness | ✅ | ✅ |
-| Automatic Connection | ✅ | ✅ |
-| Hearing Aid | 🔴 | ⚪ |
-| Transparency Mode Customization | 🔴 | ⚪ |
-| Multi-device Connectivity | ⚪ | ⚪ |
-| Accessibility Settings | 🔴 | ✅ |
-| Spatial Audio | ❓ | ❓ |
-| Heart Rate Monitoring | ⛔ | 🔴 |
+| Symbol | Meaning                                                             |
+| ------ | ------------------------------------------------------------------- |
+| ✅     | Implemented and works well                                          |
+| ⚪     | Needs [VendorID spoofing](#vendorid-spoofing); use at your own risk |
+| 🔴     | Not implemented yet; planned                                        |
+| ⛔     | Will not be implemented                                             |
+| ❓     | Unknown                                                             |
 
-| Symbol | Meaning |
-|---|---|
-| ✅ | Implemented and works |
-| ⚪ | Requires VendorID spoofing |
-| 🔴 | Not yet implemented |
-| ⛔ | Will not be implemented |
-| ❓ | Unknown |
+## Find My
 
-## Installation
+The following features related to Find My are planned, but require further RE and might need root on Android:
 
-- **[Android](/android/README.md)** — Download the APK from [Releases](https://github.com/GARFIELD5211/Auris/releases)
-- **[Linux](/linux/README.md)** — AppImage or binary available
+- Add your AirPods to the Find My network
+- Play sound through charging case to find it
+- Notify when leaving behind
+- Toggle case charging sounds
 
-## Building from Source
+## Spatial Audio
 
-### Android
+The app does not currently provide head tracking information to Android for the OS to perform HRTF. This has not been explored completely, and it might need root. 
 
-```bash
-# Requirements: JDK 21, Android SDK (API 37), NDK 30
-cd android
+Spatializing stereo sound is beyond this project's scope and will never be available. Many OEMs have an implementation of their own for this.
 
-# Generate a signing key (if you don't have one)
-keytool -genkeypair -v -keystore ../my-release.jks -keyalg RSA -keysize 2048 -validity 10000 -alias mykey
+## Heart Rate Monitoring (AirPods Pro 3 and later)
+This is being worked upon, check the #⁠reverse-engineering channel on the LibrePods Discord server for more information. If it is ever implemented, it will most likely need root on Android.
 
-# Configure local.properties with your SDK path and signing config
-# Then build:
-./gradlew assembleFossRelease
-```
+## High quality two-way audio
+On iOS/iPadOS, you can continue using A2DP while AirPods send the audio stream from its microphone over AACP. 
 
-### Linux
+Since this needs deeper integration with audio on Android, it will most likely need root.
 
-```bash
-# Requirements: Qt 6, CMake, PulseAudio dev headers
-cd linux
-mkdir build && cd build
-cmake ..
-make
-```
+# Installation
 
-## VendorID Spoofing
+- [**Android**](/android/README.md)
+- [**Linux**](/linux/README.md)
 
-Changing the VendorID in the DID Profile to Apple's (`004C`) unlocks special features:
+# VendorID Spoofing
 
-- **Linux:** Edit `/etc/bluetooth/main.conf` and add `DeviceID = bluetooth:004C:0000:0000`
-- **Android:** Enable "Act as Apple device" in app settings (requires Xposed)
+Turns out, if you change the VendorID in DID Profile to that of Apple, you get access to several special features!
 
-## Credits
+You can do this on Linux by editing the DeviceID in `/etc/bluetooth/main.conf`. Add this line to the config file `DeviceID = bluetooth:004C:0000:0000`. For android you can enable the `act as Apple device` setting in the app's settings (shown only when Xposed is available and LibrePods module is enabled).
 
-### Special Thanks
-- @tyalie for the first protocol documentation ([AAP-Protocol-Definition](https://github.com/tyalie/AAP-Protocol-Defintion))
-- @rithvikvibhu for helping with the hearing aid feature
-- @pabloaul for the Wireshark dissector ([apple-wireshark](https://github.com/pabloaul/apple-wireshark))
-- @devnoname120 for the first root patch
-- @timgromeyer for the first version of the Linux app
+## Multi-device Connectivity
 
-## License
+Upto two devices can be simultaneously connected to AirPods, for audio and control both. Seamless connection switching. The same notification shows up on Apple device when Android takes over the AirPods as if it were an Apple device ("Move to iPhone"). Android also shows a popup when the other device takes over.
 
-```
-Auris - AirPods companion for Android
+## Accessibility Settings and Hearing Aid
 
-Copyright (C) 2025 Auris contributors
+Accessibility settings like customizing transparency mode (amplification, balance, tone, conversation boost, and ambient noise reduction), and loud sound reduction can be configured.
+
+All hearing aid customizations can be done from Android (linux soon), including setting the audiogram result. The app doesn't provide a way to take a hearing test because it requires much more precision. It is much better to use an already available audiogram result. 
+
+# Protocol and Reverse Engineering
+
+Please refer to the Wireshark dissector plugin by Nojus ([@pabloaul](https://github.com/pabloaul)) for more information on the protocols used: [pabloaul/apple-wireshark](https://github.com/pabloaul/apple-wireshark)
+
+The dissector had not been used in LibrePods for most of the implementation; I had reverse engineered the protocol myself before this dissector was made. But many (future) features including two-way high quality audio and spatial audio would not have been possible without their RE efforts!
+
+# Use of AI
+
+## Android app
+
+These parts of the app were completely AI-generated: 
+- Head Gestures - all of it, including logic and the UI
+- The offset setup with r2+the xposed module (both versions)
+- Troubleshooter and LogCollector
+
+Rest everything- the background service, the Bluetooth manager classes (AACP and ATT), the entire UI, even the smallest components were written manually.
+
+Some parts of the UI components were borrowed from [Kyant0's demo app](https://github.com/Kyant0/AndroidLiquidGlass/tree/master/catalog), which is licensed under [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0).
+
+## Linux (rewrite)
+
+The `aacp.rs` and the `att.rs` files were translated from Kotlin to Rust with AI. Some parts of the `media_controller.rs` file, mainly the pulse integration, was also AI-generated.
+
+# Supporters
+
+A huge thank you to everyone supporting the project!
+
+<table>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/davdroman">
+        <img src="https://github.com/davdroman.png?size=48" width="48" height="48"alt="davdroman"/><br />
+        @davdroman
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/tedsalmon">
+        <img src="https://github.com/tedsalmon.png?size=48" width="48" height="48"alt="tedsalmon"/><br />
+        @tedsalmon
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/wiless">
+        <img src="https://github.com/wiless.png?size=48" width="48" height="48"alt="wiless"/><br />
+        @wiless
+      </a>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/SmartMsg">
+        <img src="https://github.com/SmartMsg.png?size=48" width="48" height="48"alt="SmartMsg"/><br />
+        @SmartMsg
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/lunaroyster">
+        <img src="https://github.com/lunaroyster.png?size=48" width="48" height="48"alt="lunaroyster"/><br />
+        @lunaroyster
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/ressiwage">
+        <img src="https://github.com/ressiwage.png?size=48" width="48" height="48"alt="ressiwage"/><br />
+        @ressiwage
+      </a>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/kkjdroid">
+        <img src="https://github.com/kkjdroid.png?size=48" width="48" height="48"alt="kkjdroid"/><br />
+        @kkjdroid
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/CitrusJoules">
+        <img src="https://github.com/CitrusJoules.png?size=48" width="48" height="48"alt="CitrusJoules"/><br />
+        @CitrusJoules
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/DanielReyesDev">
+        <img src="https://github.com/DanielReyesDev.png?size=48" width="48" height="48"alt="DanielReyesDev"/><br />
+        @DanielReyesDev
+      </a>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/sumitduster">
+        <img src="https://github.com/sumitduster.png?size=48" width="48" height="48"alt="sumitduster"/><br />
+        @sumitduster
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/GrifTheDev">
+        <img src="https://github.com/GrifTheDev.png?size=48" width="48" height="48"alt="GrifTheDev"/><br />
+        @GrifTheDev
+      </a>
+    </td>
+  </tr>
+</table>
+
+# Special Thanks
+- @tyalie for making the first documentation on the protocol! ([tyalie/AAP-Protocol-Definition](https://github.com/tyalie/AAP-Protocol-Defintion))
+- @rithvikvibhu and folks over at lagrangepoint for helping with the hearing aid feature ([gist](https://gist.github.com/rithvikvibhu/45e24bbe5ade30125f152383daf07016))
+- @devnoname120 for helping with the first root patch
+- @timgromeyer for making the first version of the linux app
+- @hackclub for hosting [High Seas](https://highseas.hackclub.com) and [Low Skies](https://low-skies.hackclub.com)!
+- Of course, everyone who has contributed to the project in any way, including by testing, sharing feedback, or just showing interest!
+
+# Alternates for other platforms:
+- CAPod - A companion app for AirPods on Android. ([play store](https://play.google.com/store/apps/details?id=eu.darken.capod) | [source code](https://github.com/d4rken-org/capod)). Use this if you're using Android version 16 QPR3 or below and are not rooted.
+- MagicPods for Steam Deck ([website](https://magicpods.app/steamdeck/))
+- MagicPods - if you're looking for "LibrePods for Windows"  ([ms store](https://apps.microsoft.com/store/detail/9P6SKKFKSHKM) [installer](https://magicpods.app/installer/MagicPods.appinstaller) | [website](https://magicpods.app/))
+
+# Star History
+
+<a href="https://www.star-history.com/?repos=librepods-org%2Flibrepods&type=date&legend=top-left">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=librepods-org/librepods&type=date&theme=dark&legend=top-left&sealed_token=CS9QF2Wcx-_EN6M7lBhwvTa2WBd5eB8FbQa5FWt3SV14v1OcQdy2aCGsXxHoytVaoylP_pTxj1h2U-odoXDV_EwTqMxM-MQwG_WpvV_1g_yH-Jh3ux2BuWCmS98LxLqfox2ibLOlFDHu_-geTLFsTmqTc1SjX6-NYxVHXF5DaqnxFOAyjLPL5_WtXVew" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=librepods-org/librepods&type=date&legend=top-left&sealed_token=CS9QF2Wcx-_EN6M7lBhwvTa2WBd5eB8FbQa5FWt3SV14v1OcQdy2aCGsXxHoytVaoylP_pTxj1h2U-odoXDV_EwTqMxM-MQwG_WpvV_1g_yH-Jh3ux2BuWCmS98LxLqfox2ibLOlFDHu_-geTLFsTmqTc1SjX6-NYxVHXF5DaqnxFOAyjLPL5_WtXVew" />
+   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=librepods-org/librepods&type=date&legend=top-left&sealed_token=CS9QF2Wcx-_EN6M7lBhwvTa2WBd5eB8FbQa5FWt3SV14v1OcQdy2aCGsXxHoytVaoylP_pTxj1h2U-odoXDV_EwTqMxM-MQwG_WpvV_1g_yH-Jh3ux2BuWCmS98LxLqfox2ibLOlFDHu_-geTLFsTmqTc1SjX6-NYxVHXF5DaqnxFOAyjLPL5_WtXVew" />
+ </picture>
+</a>
+
+# License
+
+LibrePods - AirPods liberated from Apple’s ecosystem
+Copyright (C) 2025 LibrePods contributors
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -95,13 +244,18 @@ any later version.
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with this program. If not, see <https://www.gnu.org/licenses/>.
-```
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-## Trademark Notice
+# Trademark Notice
 
-AirPods, AirPods Pro, AirPods Max, and the AirPods logo are trademarks of Apple Inc. This project is not affiliated with or endorsed by Apple Inc.
+The GPL does not grant any rights to use the LibrePods name, logo, or branding. The LibrePods name and logo may not be used for software, websites, domains, products, services, or other projects in a manner that suggests affiliation with, endorsement by, or association with the official LibrePods project without prior permission.
+
+If you see any misuse of the LibrePods name or logo, please report it to [me@kavish.xyz](mailto:me@kavish.xyz).
+
+The SF Pro font used in the Android app is the property of Apple Inc.. This will be removed in future versions of the app and replaced with an open alternative soon.
+
+AirPods, AirPods Pro, AirPods Max, and the AirPods logo are trademarks of Apple Inc. The LibrePods project is not affiliated with or endorsed by Apple Inc. in any way.

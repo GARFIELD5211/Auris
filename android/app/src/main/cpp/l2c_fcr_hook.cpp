@@ -1,6 +1,6 @@
 /*
-    Auris - AirPods companion for Android
-    Copyright (C) 2025 Auris contributors
+    LibrePods - AirPods liberated from Apple’s ecosystem
+    Copyright (C) 2025 LibrePods contributors
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@ extern "C" {
 #include "xz.h"
 }
 
-#define LOG_TAG "AurisHook"
+#define LOG_TAG "LibrePodsHook"
 #define LOGI(...) __android_log_print(ANDROID_LOG_INFO, LOG_TAG, __VA_ARGS__)
 #define LOGE(...) __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, __VA_ARGS__)
 
@@ -420,13 +420,13 @@ extern "C" [[gnu::visibility("default")]]
 NativeOnModuleLoaded native_init(const NativeAPIEntries *entries) {
     LOGI("native_init called with entries: %p", entries);
     hook_func = (HookFunType) entries->hook_func;
-    LOGI("AurisNativeHook initialized, sdp hook enabled: %d",
+    LOGI("LibrePodsNativeHook initialized, sdp hook enabled: %d",
          enableSdpHook.load(std::memory_order_relaxed));
     return on_library_loaded;
 }
 
 extern "C" JNIEXPORT void JNICALL
-Java_me_kavishdevar_aurix_utils_NativeBridge_setSdpHook(JNIEnv *, jobject thiz,
+Java_me_kavishdevar_librepods_utils_NativeBridge_setSdpHook(JNIEnv *, jobject thiz,
                                                             jboolean enable) {
     LOGI("setSdpHook called with enable: %d", enable);
     enableSdpHook.store(enable, std::memory_order_relaxed);

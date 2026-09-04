@@ -1,4 +1,4 @@
-# Auris on Linux
+# LibrePods on Linux
 
 A new rewrite is being worked upon. Please look at the list of features in the root README to see what's supported in the new version. 
 
@@ -13,7 +13,7 @@ The app is ready to download as an AppImage or an executable. You can download t
 
 ### Nightly Builds (recommended)
 
-You can also try the latest build of the new version from the [GitHub Actions artifacts](https://github.com/kavishdevar/librepods/actions/workflows/ci-linux-rust.yml). On the latest successful workflow run, download the **auris-x86_64.AppImage** or **auris** binary from **Artifacts**.
+You can also try the latest build of the new version from the [GitHub Actions artifacts](https://github.com/kavishdevar/librepods/actions/workflows/ci-linux-rust.yml). On the latest successful workflow run, download the **librepods-x86_64.AppImage** or **librepods** binary from **Artifacts**.
 
 
 ![new version screenshot](https://github.com/user-attachments/assets/86b3c871-89a8-4e49-861a-5119de1e1d28)
@@ -21,7 +21,7 @@ You can also try the latest build of the new version from the [GitHub Actions ar
 <details>
   <summary>README for the old version</summary>
 
-# Auris Linux
+# LibrePods Linux
 
 ![screenshot](imgs/main-app.png)
 
@@ -105,7 +105,7 @@ A native Linux application to control your AirPods, with support for:
 2. Run the application:
 
    ```bash
-   ./auris
+   ./librepods
    ```
 
 ## Troubleshooting
@@ -155,11 +155,11 @@ systemctl --user enable --now mpris-proxy
 
 ## CLI Control
 
-`auris-ctl` is a small command-line tool that lets you access Auris from the terminal or via scripts, as long as the main application is running.
+`librepods-ctl` is a small command-line tool that lets you access LibrePods from the terminal or via scripts, as long as the main application is running.
 
 ### Usage
 ```bash
-auris-ctl
+librepods-ctl
 ```
 
 ### Commands
@@ -174,10 +174,10 @@ auris-ctl
 ### Example
 ```bash
 # Enable ANC
-auris-ctl noise:anc
+librepods-ctl noise:anc
 
 # Enable Transparency mode
-auris-ctl noise:transparency
+librepods-ctl noise:transparency
 ```
 
 

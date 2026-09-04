@@ -20,5 +20,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Auris"
+rootProject.name = "LibrePods"
 include(":app")

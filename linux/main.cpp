@@ -33,7 +33,7 @@
 
 using namespace AirpodsTrayApp::Enums;
 
-Q_LOGGING_CATEGORY(auris, "auris")
+Q_LOGGING_CATEGORY(librepods, "librepods")
 
 class AirPodsTrayApp : public QObject {
     Q_OBJECT
@@ -55,8 +55,8 @@ public:
         , m_deviceInfo(new DeviceInfo(this)), m_bleManager(new BleManager(this))
         , m_systemSleepMonitor(new SystemSleepMonitor(this))
     {
-        QLoggingCategory::setFilterRules(QString("auris.debug=%1").arg(debugMode ? "true" : "false"));
-        LOG_INFO("Initializing Auris");
+        QLoggingCategory::setFilterRules(QString("librepods.debug=%1").arg(debugMode ? "true" : "false"));
+        LOG_INFO("Initializing LibrePods");
 
         // Initialize tray icon and connect signals
         trayManager = new TrayIconManager(this);
@@ -998,13 +998,13 @@ int main(int argc, char *argv[]) {
     // Try to load translation from various locations
     QStringList translationPaths = {
         QCoreApplication::applicationDirPath() + "/translations",
-        QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/auris/translations",
-        "/usr/share/auris/translations",
-        "/usr/local/share/auris/translations"
+        QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/librepods/translations",
+        "/usr/share/librepods/translations",
+        "/usr/local/share/librepods/translations"
     };
 
     for (const QString &path : translationPaths) {
-        if (translator->load("auris_" + locale, path)) {
+        if (translator->load("librepods_" + locale, path)) {
             app.installTranslator(translator);
             break;
         }
@@ -1029,7 +1029,7 @@ int main(int argc, char *argv[]) {
 
         return 0;
     }
-    app.setDesktopFileName("me.kavishdevar.aurix");
+    app.setDesktopFileName("me.kavishdevar.librepods");
     app.setQuitOnLastWindowClosed(false);
 
     bool debugMode = false;

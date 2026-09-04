@@ -31,7 +31,7 @@ bool PulseAudioController::initialize()
     }
 
     pa_mainloop_api *api = pa_threaded_mainloop_get_api(m_mainloop);
-    m_context = pa_context_new(api, "Auris");
+    m_context = pa_context_new(api, "LibrePods");
     if (!m_context)
     {
         LOG_ERROR("Failed to create PulseAudio context");

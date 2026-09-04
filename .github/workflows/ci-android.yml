@@ -45,35 +45,31 @@ jobs:
         run: sdkmanager "ndk;30.0.14904198"
       - name: Create local.properties
         if: github.event_name != 'pull_request'
-        env:
-          RELEASE_STORE_PASSWORD: ${{ secrets.RELEASE_STORE_PASSWORD }}
-          RELEASE_KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
-          RELEASE_KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}
         run: |
-          printf 'sdk.dir=/usr/local/lib/android/sdk\n' > android/local.properties
-          printf 'RELEASE_STORE_FILE=../release.keystore\n' >> android/local.properties
-          printf 'RELEASE_STORE_PASSWORD=%s\n' "$RELEASE_STORE_PASSWORD" >> android/local.properties
-          printf 'RELEASE_KEY_ALIAS=%s\n' "$RELEASE_KEY_ALIAS" >> android/local.properties
-          printf 'RELEASE_KEY_PASSWORD=%s\n' "$RELEASE_KEY_PASSWORD" >> android/local.properties
+          cat <<EOF > android/local.properties
+          RELEASE_STORE_FILE=../release.keystore
+          RELEASE_STORE_PASSWORD=${{ secrets.RELEASE_STORE_PASSWORD }}
+          RELEASE_KEY_ALIAS=${{ secrets.RELEASE_KEY_ALIAS }}
+          RELEASE_KEY_PASSWORD=${{ secrets.RELEASE_KEY_PASSWORD }}
+          EOF
       - name: Build debug APK for PRs
         if: github.event_name == 'pull_request'
         run: ./gradlew assembleFossDebug
         working-directory: android
-      - name: Build FOSS release APK
+      - name: Build release artifacts
         if: github.event_name != 'pull_request'
-        run: ./gradlew assembleFossRelease
+        run: ./gradlew packageReleaseArtifacts
         working-directory: android
       - name: Get app version
         id: version
-        run: echo "app_version=$(grep 'appVersionName =' android/app/build.gradle.kts | sed 's/.*= \"\(.*\)\"/\1/')" >> $GITHUB_OUTPUT
+        run: echo "app_version=$(grep 'appVersionName =' android/app/build.gradle.kts | sed 's/.*= "\(.*\)"/\1/')" >> $GITHUB_OUTPUT
       - id: vars
         run: echo "short_sha=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
       - uses: actions/upload-artifact@v4
         if: github.event_name != 'pull_request'
         with:
           name: apk-release
-          path: android/app/build/outputs/apk/foss/release/*.apk
-          if-no-files-found: error
+          path: release/*release.apk
 
       - uses: actions/upload-artifact@v4
         if: github.event_name == 'pull_request'
@@ -81,7 +77,29 @@ jobs:
           name: apk-debug
           path: android/app/build/outputs/apk/foss/debug/app-foss-debug.apk
 
+      - uses: actions/upload-artifact@v4
+        if: github.event_name != 'pull_request'
+        with:
+          name: apk-debug
+          path: release/*debug.apk
 
+      - uses: actions/upload-artifact@v4
+        if: github.event_name != 'pull_request'
+        with:
+          name: root-module-release
+          path: release/*release.zip
+
+      - uses: actions/upload-artifact@v4
+        if: github.event_name != 'pull_request'
+        with:
+          name: root-module-debug
+          path: release/*debug.zip
+
+      - uses: actions/upload-artifact@v4
+        if: github.event_name != 'pull_request'
+        with:
+          name: release-bundle
+          path: release/*.aab
 
   release:
     if: github.event_name == 'push'
@@ -99,6 +117,21 @@ jobs:
         with:
           name: apk-release
           path: artifacts/apk-release
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: apk-debug
+          path: artifacts/apk-debug
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: root-module-release
+          path: artifacts/root-module-release
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: root-module-debug
+          path: artifacts/root-module-debug
       - id: prev
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -109,13 +142,12 @@ jobs:
             --jq '.[0].tagName')
 
           echo "tag=$TAG" >> $GITHUB_OUTPUT
-
       - id: changelog
         run: |
           if [ -z "${{ steps.prev.outputs.tag }}" ]; then
-            NOTES=$(git log --pretty=format:"- %s ([%h](https://github.com/GARFIELD5211/Auris/commit/%H))")
+            NOTES=$(git log --pretty=format:"- %s ([%h](https://github.com/kavishdevar/librepods/commit/%H))")
           else
-            NOTES=$(git log ${{ steps.prev.outputs.tag }}..HEAD --pretty=format:"- %s ([%h](https://github.com/GARFIELD5211/Auris/commit/%H))")
+            NOTES=$(git log ${{ steps.prev.outputs.tag }}..HEAD --pretty=format:"- %s ([%h](https://github.com/kavishdevar/librepods/commit/%H))")
           fi
           echo "notes<<EOF" >> $GITHUB_OUTPUT
           echo "$NOTES" >> $GITHUB_OUTPUT
@@ -132,3 +164,49 @@ jobs:
             -t "Nightly ${{ needs.build.outputs.short_sha }}" \
             --notes "${{ steps.changelog.outputs.notes }}" \
             --prerelease
+      - name: Get timestamp
+        id: timestamp
+        run: echo "timestamp=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> $GITHUB_OUTPUT
+      - name: Post to Discord
+        run: |
+          curl -X POST "${{ secrets.DISCORD_ANDROID_CI_URL }}?with_components=true" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "embeds": [
+                {
+                  "title": "LibrePods Nightly Build",
+                  "description": "Download the latest debug and release APKs.",
+                  "color": 253060,
+                  "fields": [
+                    {
+                      "name": "Changelog",
+                      "value": "${{ steps.changelog.outputs.notes }}",
+                      "inline": false
+                    }
+                  ],
+                  "timestamp": "${{ steps.timestamp.outputs.timestamp }}",
+                  "footer": {
+                    "text": "GitHub Actions"
+                  }
+                }
+              ],
+              "components": [
+                {
+                  "type": 1,
+                  "components": [
+                    {
+                      "type": 2,
+                      "label": "Download Release APK",
+                      "style": 5,
+                      "url": "https://github.com/kavishdevar/librepods/releases/download/nightly-${{ needs.build.outputs.short_sha }}/LibrePods-FOSS-v${{ needs.build.outputs.app_version }}-release.apk"
+                    },
+                    {
+                      "type": 2,
+                      "label": "Download Debug APK",
+                      "style": 5,
+                      "url": "https://github.com/kavishdevar/librepods/releases/download/nightly-${{ needs.build.outputs.short_sha }}/LibrePods-FOSS-v${{ needs.build.outputs.app_version }}-debug.apk"
+                    }
+                  ]
+                }
+              ]
+            }'

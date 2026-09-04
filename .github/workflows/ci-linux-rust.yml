@@ -47,22 +47,22 @@ jobs:
           cargo build --release --verbose
           just
           mkdir -p dist
-          cp target/release/auris dist/auris
-          mv dist/auris-x86_64.AppImage dist/auris-x86_64.AppImage
+          cp target/release/librepods dist/librepods
+          mv dist/LibrePods-x86_64.AppImage dist/librepods-x86_64.AppImage
 
       - name: Upload AppImage artifact
         if: "!startsWith(github.ref, 'refs/tags/linux-v')"
         uses: actions/upload-artifact@v4
         with:
-          name: auris-x86_64.AppImage
-          path: linux-rust/dist/auris-x86_64.AppImage
+          name: librepods-x86_64.AppImage
+          path: linux-rust/dist/librepods-x86_64.AppImage
 
       - name: Upload binary artifact
         if: "!startsWith(github.ref, 'refs/tags/linux-v')"
         uses: actions/upload-artifact@v4
         with:
-          name: auris
-          path: linux-rust/dist/auris
+          name: librepods
+          path: linux-rust/dist/librepods
 
       - name: Create tarball for Flatpak
         if: startsWith(github.ref, 'refs/tags/linux-v')
@@ -71,7 +71,7 @@ jobs:
           VERSION="${GITHUB_REF_NAME#linux-v}"
           just tarball "${VERSION}"
           echo "VERSION=${VERSION}" >> $GITHUB_ENV
-          echo "TAR_PATH=linux-rust/dist/auris-v${VERSION}-source.tar.gz" >> $GITHUB_ENV
+          echo "TAR_PATH=linux-rust/dist/librepods-v${VERSION}-source.tar.gz" >> $GITHUB_ENV
 
       - name: Create GitHub Release (AppImage + binary + source)
         if: startsWith(github.ref, 'refs/tags/linux-v')
@@ -79,9 +79,9 @@ jobs:
         with:
           tag_name: ${{ github.ref_name }}
           files: |
-            linux-rust/dist/auris-v${{ env.VERSION }}-source.tar.gz
-            linux-rust/dist/auris-x86_64.AppImage
-            linux-rust/dist/auris
+            linux-rust/dist/librepods-v${{ env.VERSION }}-source.tar.gz
+            linux-rust/dist/librepods-x86_64.AppImage
+            linux-rust/dist/librepods
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
